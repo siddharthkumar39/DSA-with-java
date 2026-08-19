@@ -1,3 +1,4 @@
+
 public class AddinLinklist {
     //class for node
     public class Node{
@@ -98,7 +99,7 @@ public class AddinLinklist {
         for(int i=0;i<size-2;i++){
             prev=prev.next;
         }
-        //store kr lia
+        //store kr lia kuki ham jo node dellte krrhe use print v kr rhe
         int val=prev.next.data;//tail data
         prev.next=null;
         tail=prev;
@@ -138,8 +139,8 @@ public class AddinLinklist {
         }
 
         public void reverse(){
-            Node prev=null;//kuki head ka piche kuch nhi hota 
-            Node curr=tail=head;
+            Node prev=null;//kuki starting head ka previous kuch nhi hota 
+            Node curr=tail=head;//kuki reverse hone ke bad head=tail bn jyga
             Node next;
 
             while(curr!=null){
@@ -148,7 +149,7 @@ public class AddinLinklist {
                 prev=curr;
                 curr=next;
             }
-            head=prev;
+            head=prev;//kuki last me current null ho jyga islie uske phle walw ko head
         }
     public void print(){
         Node temp=head;
@@ -187,6 +188,7 @@ public class AddinLinklist {
             prev.next=prev.next.next;
 
         }
+        //for checking palindrome using slow fast pointer
 
         public Node findMid(Node head){
             Node slow=head;
@@ -196,7 +198,7 @@ public class AddinLinklist {
                 slow=slow.next;//+1
                 fast=fast.next.next;//+2
             }
-            return slow;
+            return slow;//this will give me mid
         }
         public boolean checkpalindrome(){
             if(head==null || head.next==null){
@@ -215,7 +217,7 @@ public class AddinLinklist {
                 prev=curr;
                 curr=next;
             }
-            Node right=prev; //right half ka head
+            Node right=prev; //right half ka head kuki right half ka current null ho jyga
             Node left=head;
             //check left half and right half
             while(right!=null){
@@ -227,6 +229,59 @@ public class AddinLinklist {
             }
             return true;
         }
+        //merge sort
+        private Node getMid(Node head){ //for get mid two pointer approach
+            Node slow=head;
+            Node fast=head.next;
+            while(fast!=null&&fast.next!=null){
+                slow=slow.next;
+                fast=fast.next.next;
+            }
+            return slow;//slow will return mid 
+        }
+        private Node merge(Node head1,Node head2){
+            Node mergedll=new Node(-1);
+            Node temp=mergedll;
+
+            while(head1 !=null && head2!=null){
+                if(head1.data<=head2.data){
+                    temp.next=head1;
+                    head1=head1.next;
+                    temp=temp.next;
+                }else{
+                    temp.next=head2;
+                    head2=head2.next;
+                    temp=temp.next;
+                }
+            }
+            //for remaining loops
+            while(head1!=null){
+                temp.next=head1;
+                head1=head1.next;
+                temp=temp.next;
+            }
+            while(head2!=null){
+                temp.next=head2;
+                head2=head2.next;
+                temp=temp.next;
+            }
+            return mergedll.next;
+        }
+        public Node mergesort(Node head){
+            if(head==null || head.next==null){
+                return head;
+            }
+            //findmid
+            Node mid=getMid(head);
+            //left & right  merge sort
+            Node rightHead=mid.next;//right half ka head
+            mid.next=null;//seperate ho left and half
+            Node newleft=mergesort(head);
+            Node newRight=mergesort(rightHead);
+            //merge
+            return merge(newleft,newRight);
+        }
+
     public static void main(String args[]){
         AddinLinklist ll=new AddinLinklist();
         ll.print();
@@ -250,5 +305,14 @@ public class AddinLinklist {
         ll.deleteNthfromEnd(2);
         ll.print();
         System.out.println(ll.checkpalindrome());
+        System.out.println("mergesort");
+        ll.addFirst(1);
+        ll.addFirst(2);
+        ll.addFirst(3);
+        ll.addFirst(4);
+        ll.addFirst(5);
+        ll.print();
+        ll.head=ll.mergesort(ll.head);
+        ll.print();
     }
 }
