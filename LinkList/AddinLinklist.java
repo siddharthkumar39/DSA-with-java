@@ -281,6 +281,42 @@ public class AddinLinklist {
             //merge
             return merge(newleft,newRight);
         }
+        //zigzag
+        public void zigzag(){
+            Node slow=head;
+            Node fast=head.next;
+            while(slow!=null&fast!=null){
+                slow=slow.next;
+                fast=fast.next.next;
+            }
+            Node mid=slow;
+            //reverse 
+            Node curr=mid.next;
+            mid.next=null;
+            Node prev=null;
+            Node next;
+
+            while(curr!=null){
+                next=curr.next;
+                curr.next=prev;
+                prev=curr;
+                curr=next;
+            }
+             Node left=head;
+             Node right=prev;
+             Node nextL,nextR;
+
+             //merg Zig zAg
+             while(left!=null&&right!=null){
+                nextL=left.next;
+                left.next=right;
+                nextR=right.next;
+                right.next=nextL;
+                //update
+                left=nextL;
+                right=nextR;
+             }
+        }
 
     public static void main(String args[]){
         AddinLinklist ll=new AddinLinklist();
@@ -314,5 +350,16 @@ public class AddinLinklist {
         ll.print();
         ll.head=ll.mergesort(ll.head);
         ll.print();
+        System.out.println("zigzag");
+        ll.addLast(1);
+        ll.addLast(2);
+        ll.addLast(3);
+        ll.addLast(4);
+        ll.addLast(5);
+        ll.addLast(6);
+        ll.print();
+        ll.zigzag();
+        ll.print();
+
     }
 }
